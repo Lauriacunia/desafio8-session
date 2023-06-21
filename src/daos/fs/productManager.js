@@ -28,7 +28,7 @@ class ProductManager {
 
   async updateProduct(id, newProduct) {
     let allProductsArray = await this.read(this.file);
-    console.log("productos", allProductsArray);
+
     const productToUpdate = allProductsArray.find(
       (product) => product.id == id
     );

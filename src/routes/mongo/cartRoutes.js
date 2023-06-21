@@ -75,10 +75,10 @@ router.get("/:idCart/products", async (req, res) => {
 router.get("/:idCart", async (req, res) => {
   try {
     const idCart = req.params.idCart;
-    console.log("idCart", idCart);
+
     const cart = await db.getOne(idCart);
     const products = cart.products;
-    console.log("products", products);
+
     cart
       ? res.render("myCart", { products })
       : res.status(404).json({

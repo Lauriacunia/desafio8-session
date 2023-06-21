@@ -8,7 +8,7 @@ export default (io) => {
     socket.on("new-message", async (message) => {
       db.create(message);
       const messages = await db.getAll();
-      console.log(messages);
+
       socket.emit("refresh-messages", messages);
       socket.broadcast.emit("refresh-messages", messages);
     });

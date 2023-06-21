@@ -1,5 +1,3 @@
-console.log("home.js loaded");
-
 const createCart = () => {
   console.log("🛒 Creando tu carrito...");
   if (!localStorage.getItem("funcionEjecutadaSoloUnaVez")) {
@@ -12,19 +10,13 @@ const createCart = () => {
         localStorage.setItem("myCart", JSON.stringify(myCart));
         localStorage.setItem("myCartId", JSON.stringify(myCart._id));
         localStorage.setItem("funcionEjecutadaSoloUnaVez", true);
-        console.log(
-          "Tu carrito fue creado exitosamente. Id: ",
-          localStorage.getItem("myCartId")
-        );
       })
       .catch((err) => console.log(err));
   }
 };
 
 const getAllProducts = (limit, page, sort, query) => {
-  console.log("🛒 Obteniendo todos los productos...");
   const myCartId = JSON.parse(localStorage.getItem("myCartId"));
-  console.log("myCartId", myCartId);
   let urlBase = `/products`;
   if (limit) {
     urlBase += `?limit=${limit}`;
@@ -42,7 +34,6 @@ const getAllProducts = (limit, page, sort, query) => {
   fetch(`${urlBase}`)
     .then((res) => res.json())
     .then((data) => {
-      console.log(data);
       const products = data.payload.docs;
       renderProducts(products);
       renderPagination(data.payload);
@@ -87,7 +78,6 @@ function renderProducts(products) {
   });
 }
 function renderPagination(payload) {
-  console.log("render pagination", payload);
   let hasNextPage = payload.hasNextPage;
   let hasPrevPage = payload.hasPrevPage;
   let limit = payload.limit;
@@ -129,7 +119,6 @@ const addToCart = (id) => {
   })
     .then((res) => res.json())
     .then((data) => {
-      console.log(data);
       //reload page
       window.location.reload();
     })
@@ -142,7 +131,6 @@ const deleteProduct = (id) => {
   })
     .then((res) => res.json())
     .then((data) => {
-      console.log(data);
       //reload page
       window.location.reload();
     })

@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --experimental-json-modules src/server.js",
-    "dev": "nodemon --experimental-json-modules src/server.js"
+    "start": "node --experimental-json-modules src/app.js",
+    "dev": "nodemon --experimental-json-modules src/app.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/Lauriacunia/desafio3-comision51318#readme",
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "connect-mongo": "^5.0.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",

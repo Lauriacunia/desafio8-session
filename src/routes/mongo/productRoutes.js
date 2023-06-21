@@ -30,7 +30,7 @@ router.get("/", async (req, res) => {
      * y un query (opcional)
      */
     const { limit, page, sort, query } = req.query;
-    console.log(limit, page, sort, query);
+
     const products = await db.getAll(limit, page, sort, query);
     products
       ? res.status(200).json({
@@ -86,7 +86,7 @@ router.post("/", validateRequest, async (req, res) => {
       return;
     }
     const productCreated = await db.create(newProduct);
-    console.log(productCreated);
+
     res.status(201).json({
       status: "success",
       payload: productCreated,

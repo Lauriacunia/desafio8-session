@@ -39,7 +39,7 @@ router.get("/", isAuth, async (req, res) => {
     /** Passport guarda automagicamente (en en login) los datos del user en la session
      *  y puede accederse a ellos con req.user
      */
-    console.log("user: ", req.user);
+    console.log("usuario guardado en session: ", req.user);
     const username = req.user?.username;
     //response
     res.render("home", { username });

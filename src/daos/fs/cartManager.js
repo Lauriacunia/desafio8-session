@@ -10,7 +10,6 @@ class CartManager {
 
   async addCart() {
     const allCartsArray = await this.read();
-    console.log("allCartsArray", allCartsArray);
     const nextId = await this.getNextId(allCartsArray);
     const newCart = {
       id: nextId,
@@ -38,7 +37,6 @@ class CartManager {
     const productToAdd = allProductsArray.find(
       (product) => product.id == idProduct
     );
-    console.log("productToAdd", productToAdd);
     if (!productToAdd) {
       return {
         status: "error",
@@ -52,7 +50,6 @@ class CartManager {
       cartToUpdate,
       idProduct
     );
-    console.log("productAlreadyInCart", productAlreadyInCart);
 
     if (productAlreadyInCart) {
       const index = cartToUpdate.products.indexOf(productAlreadyInCart);
@@ -108,7 +105,6 @@ class CartManager {
   }
 
   async getNextId(allCartsArray) {
-    console.log("allCartsArray en getNextId", allCartsArray);
     let lastId = 0;
     // recorro allCartsArray y guardo todos los ids en un array nuevo. Luego busco el máximo
     const allIdsArray = allCartsArray.map((product) => product.id);

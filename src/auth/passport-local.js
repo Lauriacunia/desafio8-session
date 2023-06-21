@@ -1,6 +1,7 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import MongoDBUsers from "../daos/mongo/MongoDBUsers.js";
+import { encryptPassword, comparePassword } from "../config/bcrypt.js";
 const db = new MongoDBUsers();
 
 const localStrategy = LocalStrategy;
@@ -18,7 +19,6 @@ passport.use(
     },
     async (req, username, password, done) => {
       // done es un callback que se ejecuta cuando termina la funcion
-      console.log("register username", username);
       const usuarioSaved = await db.getUserByUsername({ username });
       if (usuarioSaved) {
         console.log("El usuario ya existe!! No hay que registrarlo");
@@ -26,13 +26,13 @@ passport.use(
           message: "Error - Register. User already exist",
         });
       } else {
-        console.log("Guardando nuevo usuario...");
+        const hashPass = await encryptPassword(password);
         const newUser = {
-          username,
-          password,
+          username: username,
+          password: hashPass,
         };
         const response = await db.create(newUser);
-        console.log("response", response);
+        console.log("Nuevo usuario registrado: ", response);
         return done(null, response);
       }
     }
@@ -55,7 +55,11 @@ passport.use(
       if (!usuarioSaved) {
         return done(null, false, { message: "Error - Login. User not exists" });
       }
-      if (usuarioSaved.password !== password) {
+      const isTruePassword = await comparePassword(
+        password,
+        usuarioSaved.password
+      );
+      if (!isTruePassword) {
         return done(null, false, {
           message: "Error- Login. Password doesnt match",
         });

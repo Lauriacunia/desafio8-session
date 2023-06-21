@@ -1,4 +1,3 @@
-console.log("chat js loaded");
 const socket = io();
 
 const messageContainer = document.getElementById("messages");
@@ -22,8 +21,6 @@ btn.addEventListener("click", () => {
 
 /** El cliente recibe los mensajes desde el servidor*/
 socket.on("refresh-messages", (messages) => {
-  console.log("actualizando mensajes");
-  console.log("mensajes que llegan al cliente ", messages);
   messageContainer.innerHTML = messages
     .map((message) => {
       return `<div

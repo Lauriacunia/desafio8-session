@@ -74,12 +74,12 @@ router.post("/", validateRequest, validateCodeNotRepeated, async (req, res) => {
   try {
     const newProduct = req.body;
     const photo = req.file;
-    console.log(newProduct);
-    console.log(photo);
+    // console.log(newProduct);
+    // console.log(photo);
     //  antes de guardar el objeto le añado la propiedad para que se pueda acceder a la foto.
     newProduct.thumbnail = "/uploads/" + photo.filename;
     const productCreated = await myProductManager.addProduct(newProduct);
-    console.log(productCreated);
+
     res.redirect("/");
   } catch (err) {
     res.status(err.status || 500).json({

@@ -26,7 +26,7 @@ const app = express();
 const PORT = 8080 || process.env.PORT;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-console.log(__dirname);
+
 /** ★━━━━━━━━━━━★ server httt & websocket ★━━━━━━━━━━━★ */
 
 /** Tenemos dos servidores:  httpServer (http) y io (websocket)*/
