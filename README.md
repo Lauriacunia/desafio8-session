@@ -95,3 +95,9 @@ npm i passport passport-local
 ```
 npm install connect-flash
 ```
+
+- Usar passport con github
+
+```
+npm i passport-github2
+```

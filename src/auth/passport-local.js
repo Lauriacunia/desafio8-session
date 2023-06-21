@@ -1,10 +1,19 @@
 import passport from "passport";
+import dotenv from "dotenv";
+dotenv.config();
 import { Strategy as LocalStrategy } from "passport-local";
+// passport-github2
+import { Strategy as GitHubStrategy } from "passport-github2";
 import MongoDBUsers from "../daos/mongo/MongoDBUsers.js";
 import { encryptPassword, comparePassword } from "../config/bcrypt.js";
 const db = new MongoDBUsers();
 
 const localStrategy = LocalStrategy;
+const githubStrategy = GitHubStrategy;
+
+// variables de entorno
+const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
+const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
 
 passport.use(
   "register",
@@ -104,5 +113,30 @@ function isAuth(req, res, next) {
   }
   res.redirect("/auth/login");
 }
+/** AUTHENTICATION - GITHUB */
+passport.use(
+  new githubStrategy(
+    {
+      clientID: GITHUB_CLIENT_ID,
+      clientSecret: GITHUB_CLIENT_SECRET,
+      callbackURL: "http://localhost:8080/auth/github/callback",
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      // Aquí puedes manejar los datos del usuario autenticado
+      // profile contiene la información del usuario
+      const user = {
+        username: profile.username,
+        password: null, // no tenemos password pero lo necesita el modelo
+      };
+      const userSaved = await db.getUserByUsername({ username: user.username });
+      if (userSaved) {
+        return done(null, userSaved);
+      } else {
+        const response = await db.create(user);
+        return done(null, response);
+      }
+    }
+  )
+);
 
 export { passport, isAuth };
