@@ -18,13 +18,23 @@ passport.use(
     },
     async (req, username, password, done) => {
       // done es un callback que se ejecuta cuando termina la funcion
+      console.log("register username", username);
       const usuarioSaved = await db.getUserByUsername({ username });
       if (usuarioSaved) {
-        return done(null, false, { message: "El usuario ya existe" });
+        console.log("El usuario ya existe!! No hay que registrarlo");
+        return done(null, false, {
+          message: "Error - Register. User already exist",
+        });
+      } else {
+        console.log("Guardando nuevo usuario...");
+        const newUser = {
+          username,
+          password,
+        };
+        const response = await db.create(newUser);
+        console.log("response", response);
+        return done(null, response);
       }
-
-      await db.create({ username, password });
-      return done(null, nuevoUsuario);
     }
   )
 );
@@ -38,14 +48,21 @@ passport.use(
       passReqToCallback: true, //Para que el callback reciba el req completo
     },
     async (req, username, password, done) => {
+      // aunque no se use el req, hay que ponerlo para que funcione
       // done es un callback que se ejecuta cuando termina la funcion
+
       const usuarioSaved = await db.getUserByUsername({ username });
       if (!usuarioSaved) {
-        return done(null, false, { message: "El usuario no existe" });
+        return done(null, false, { message: "Error - Login. User not exists" });
       }
       if (usuarioSaved.password !== password) {
-        return done(null, false, { message: "El password es incorrecto" });
+        return done(null, false, {
+          message: "Error- Login. Password doesnt match",
+        });
       }
+      // Guardamos el usuario en la session
+      req.session.username = usuarioSaved.username;
+
       return done(null, usuarioSaved);
     }
   )
@@ -64,4 +81,17 @@ passport.deserializeUser(async (id, done) => {
   done(null, user);
 });
 
-export { passport };
+// middleware para proteger rutas
+function isAuth(req, res, next) {
+  /**
+   * req.isAuthenticated() es una función propia de passport que
+   * verifica que el usuario este autenticado.
+   */
+  if (req.isAuthenticated()) {
+    // Si esta autenticado sigue con la ejecucion que queremos
+    return next();
+  }
+  res.redirect("/auth/login");
+}
+
+export { passport, isAuth };

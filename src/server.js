@@ -92,6 +92,9 @@ app.use("/products", productRoutes);
 app.use("/carts", cartRoutes);
 app.use("/chat", chatRoutes);
 app.use("/auth", authRoutes);
+app.use("/error", (req, res) => {
+  res.render("error");
+});
 
 // redirect to /home
 app.get("/", (req, res) => {

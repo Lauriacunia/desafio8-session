@@ -153,6 +153,15 @@ const goToCart = () => {
   const myCartId = JSON.parse(localStorage.getItem("myCartId"));
   window.location.href = "/carts/" + myCartId;
 };
+const goToLogin = () => {
+  window.location.href = "/auth/login";
+};
+const goToRegister = () => {
+  window.location.href = "/auth/register";
+};
+const goToLogout = () => {
+  window.location.href = "/auth/logout";
+};
 
 const init = () => {
   createCart();

@@ -1,7 +1,8 @@
 import { Router } from "express";
 const router = Router();
+import { isAuth } from "../../auth/passport-local.js";
 
-router.get("/", async (req, res) => {
+router.get("/", isAuth, async (req, res) => {
   try {
     /**
      Setear una cookie
@@ -24,26 +25,24 @@ router.get("/", async (req, res) => {
       httpOnly: true,
     });
     /** Ejemplo de session. Contador de visitas */
-    if (req.session.cont) {
+    if (req.session.count) {
       //🗨 a la session se le agrega una propiedad cont que guarda ese dato
-      req.session.cont++;
+      req.session.count++;
     } else {
-      req.session.cont = 1;
+      req.session.count = 1;
     }
     /**🗨 en el navegador se inyecta UNA SOLA COOKIE con el
      * id de la session que se llama connect.sid
      */
     // con req.session se accede a la session y a sus propiedades (keys y values)
-    console.log("Visitas: " + req.session.cont);
-    /** Si quisiera borrar la session en un logout:
-     * req.session.destroy((err) => {
-     * if (!err) console.log("Session eliminada");
-     * });
-     *
+    console.log("Visitas: " + req.session.count);
+    /** Passport guarda automagicamente (en en login) los datos del user en la session
+     *  y puede accederse a ellos con req.user
      */
-
+    console.log("user: ", req.user);
+    const username = req.user?.username;
     //response
-    res.render("home");
+    res.render("home", { username });
   } catch (err) {
     res.status(err.status || 500).json({
       status: "error",

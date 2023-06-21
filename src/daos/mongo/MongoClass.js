@@ -24,7 +24,6 @@ class MongoClass {
   }
 
   async create(doc) {
-    console.log(doc);
     try {
       const newDoc = await this.baseModel.create(doc);
       return newDoc;

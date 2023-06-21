@@ -3,7 +3,7 @@
   <div class="navbar-brand">
     <a class="navbar-item" href="https://bulma.io">
       <img
-        src="https://github.com/Lauriacunia/desafio7-2dapreentrega-clase17/assets/63796774/46281dc1-b87b-40a9-bc29-4cd17d483f0b"
+        src="https://github.com/Lauriacunia/desafio8-session/assets/63796774/b279eabe-dfac-48cb-8c4d-4a941ce1168e"
         width="70"
         style="max-height: max-content;"
       />
@@ -27,15 +27,37 @@
     <div class="navbar-end">
       <div class="navbar-item">
         <div class="buttons">
-          <a class="button is-info" onclick="goToCart()">
-            <strong>Cart</strong>
-          </a>
-          <a class="button is-primary">
-            <strong>Sign up</strong>
-          </a>
-          <a class="button is-light">
-            Log in
-          </a>
+          {{#if username}}
+            <div
+              style="display: flex;
+                      align-items: center;"
+            >
+              <div>
+                <h4 class="title is-4" style="margin-right: 15px;">👋 Hola
+                  {{username}}</h4>
+              </div>
+              <div style="margin-right: 10px;">
+                <a class="button is-info" onclick="goToCart()">
+                  <strong>Cart</strong>
+                </a>
+              </div>
+              <div style="margin-right: 10px;">
+                <a class="button is-light" onclick="goToLogout()">
+                  Logout
+                </a>
+              </div>
+
+            </div>
+          {{else}}
+            <div>
+              <a class="button is-primary" onclick="goToRegister()">
+                <strong>Sign up</strong>
+              </a>
+              <a class="button is-light" onclick="goToLogin()">
+                Log in
+              </a>
+            </div>
+          {{/if}}
         </div>
       </div>
     </div>

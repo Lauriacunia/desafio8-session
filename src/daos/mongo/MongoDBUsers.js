@@ -7,8 +7,10 @@ export class MongoDBUsers extends MongoClass {
   }
 
   async getUserByUsername(username) {
+    console.log("getUserByUsername", username);
     try {
       const user = await this.baseModel.findOne(username);
+      console.log("user", user);
       return user;
     } catch (err) {
       throw new Error(err);
