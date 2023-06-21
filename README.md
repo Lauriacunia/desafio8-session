@@ -65,3 +65,27 @@ npm install dotenv --save
 ```
  npm i mongoose-paginate-v2
 ```
+
+- Cookies
+
+```
+npm i cookie-parser
+```
+
+- Session
+
+```
+npm i express-session
+```
+
+- Bcrypt
+
+```
+npm i bcrypt
+```
+
+- Passport Y estrategia passport-local
+
+```
+npm i passport passport-local
+```

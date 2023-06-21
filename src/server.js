@@ -14,6 +14,8 @@ import exphbs from "express-handlebars";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { connectMongoDB } from "./config/configMongoDB.js";
+import cookieParser from "cookie-parser";
+import session from "express-session";
 
 /** ★━━━━━━━━━━━★ variables ★━━━━━━━━━━━★ */
 
@@ -38,6 +40,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 
+/** para gestionar cookies dentro de cada endpoint
+ * lo que está entre parentesis es la clave secreta
+ */
+app.use(cookieParser("mySecret"));
+/** session */
+app.use(
+  session({ secret: "un-re-secreto", resave: true, saveUninitialized: true })
+);
+
 /** ★━━━━━━━━━━━★ frontend ★━━━━━━━━━━━★*/
 // Configuración de Express Handlebars
 const handlebars = exphbs.create({
@@ -60,6 +71,15 @@ app.use("/home", homeRoutes);
 app.use("/products", productRoutes);
 app.use("/carts", cartRoutes);
 app.use("/chat", chatRoutes);
+
+// redirect to /home
+app.get("/", (req, res) => {
+  res.redirect("/home");
+});
+//not found
+app.use("*", (req, res, next) => {
+  res.status(404).json({ error: "not found" });
+});
 
 /** ★━━━━━━━━━━━★ connection mongoDB ★━━━━━━━━━━━★ */
 connectMongoDB();
