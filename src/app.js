@@ -102,7 +102,7 @@ app.get("/", (req, res) => {
 });
 //not found
 app.use("*", (req, res, next) => {
-  res.status(404).json({ error: "not found" });
+  res.render("notfound");
 });
 
 /** ★━━━━━━━━━━━★ connection mongoDB ★━━━━━━━━━━━★ */
