@@ -89,3 +89,9 @@ npm i bcrypt
 ```
 npm i passport passport-local
 ```
+
+- Opcional para enviar mensajes flash a handlebars
+
+```
+npm install connect-flash
+```

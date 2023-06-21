@@ -19,6 +19,7 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import { passport } from "./auth/passport-local.js";
+import flash from "connect-flash";
 
 /** ★━━━━━━━━━━━★ variables ★━━━━━━━━━━━★ */
 
@@ -69,6 +70,8 @@ app.use(
 app.use(passport.initialize()); // Inicializa passport
 app.use(passport.session()); // Enlaza passport con la sesion
 
+app.use(flash());
+
 /** ★━━━━━━━━━━━★ frontend ★━━━━━━━━━━━★*/
 // Configuración de Express Handlebars
 const handlebars = exphbs.create({
@@ -93,7 +96,8 @@ app.use("/carts", cartRoutes);
 app.use("/chat", chatRoutes);
 app.use("/auth", authRoutes);
 app.use("/error", (req, res) => {
-  res.render("error");
+  const { errorMessage } = req.flash();
+  res.render("error", { errorMessage });
 });
 
 // redirect to /home

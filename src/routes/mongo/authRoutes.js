@@ -18,6 +18,7 @@ router.post(
   passport.authenticate("register", {
     successRedirect: "/auth/login",
     failureRedirect: "/error",
+    failureFlash: true, // Habilitar mensajes flash
   })
 );
 
@@ -27,6 +28,7 @@ router.post(
   passport.authenticate("login", {
     successRedirect: "/home",
     failureRedirect: "/error",
+    failureFlash: true, // Habilitar mensajes flash
   })
 );
 

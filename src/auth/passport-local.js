@@ -15,16 +15,17 @@ passport.use(
        */
       usernameField: "username",
       passwordField: "password",
-      passReqToCallback: true, //Para que el callback reciba el req completo
+      passReqToCallback: true, //Para que el callback reciba el req completo,
     },
     async (req, username, password, done) => {
       // done es un callback que se ejecuta cuando termina la funcion
       const usuarioSaved = await db.getUserByUsername({ username });
       if (usuarioSaved) {
-        console.log("El usuario ya existe!! No hay que registrarlo");
-        return done(null, false, {
-          message: "Error - Register. User already exist",
-        });
+        req.flash(
+          "errorMessage",
+          "El usuario ya existe en nuestra Base de datos. Por favor, elija otro nombre de usuario."
+        );
+        return done(null, false);
       } else {
         const hashPass = await encryptPassword(password);
         const newUser = {
@@ -53,16 +54,22 @@ passport.use(
 
       const usuarioSaved = await db.getUserByUsername({ username });
       if (!usuarioSaved) {
-        return done(null, false, { message: "Error - Login. User not exists" });
+        req.flash(
+          "errorMessage",
+          "El usuario ingresado no existe. Por favor, regístrese."
+        );
+        return done(null, false);
       }
       const isTruePassword = await comparePassword(
         password,
         usuarioSaved.password
       );
       if (!isTruePassword) {
-        return done(null, false, {
-          message: "Error- Login. Password doesnt match",
-        });
+        req.flash(
+          "errorMessage",
+          "La contraseña ingresada es incorrecta. Por favor, intente nuevamente."
+        );
+        return done(null, false);
       }
       // Guardamos el usuario en la session
       req.session.username = usuarioSaved.username;
